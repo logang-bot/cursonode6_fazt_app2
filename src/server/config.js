@@ -13,7 +13,7 @@ const errorHandler = require('errorhandler')
 module.exports=app=>{
     //settings
     app.set('port', process.env.PORT || 8000)
-    app.set('views', path.join(__dirname, 'views'))
+    app.set('views', path.join(__dirname, '../views'))
     app.engine('.hbs', exphbs({
         defaultLayout: 'main',
         partialsDir: path.join(app.get('views'),'partials'),
