@@ -10,8 +10,8 @@ const ctrl = {}
 
 ctrl.index =async (req,res)=>{
     const imagee = await image.findOne({filename: {$regex: req.params.image_id}})
-    console.log(imagee)
-    res.render('image', {imagee})
+    const comments = await comment.find({image_id:imagee._id})
+    res.render('image', {imagee, comments})
 }
 ctrl.create =async (req,res)=>{
 
