@@ -7,8 +7,10 @@ const { ETXTBSY } = require('constants')
 
 const ctrl = {}
 
-ctrl.index =(req,res)=>{
-
+ctrl.index =async (req,res)=>{
+    const imagee = await image.findOne({filename: {$regex: req.params.image_id}})
+    console.log(imagee)
+    res.render('image', {imagee})
 }
 ctrl.create =async (req,res)=>{
 
@@ -32,8 +34,7 @@ const saveimage = async ()=>{
                 description: req.body.description
             })
             const imgsaved = await newimg.save()
-            //res.redirect('/images')
-            res.send('works')
+            res.redirect('/images/'+ imgurl)
         }
         else {
             await fs.unlink(imageTempPath)
