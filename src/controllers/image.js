@@ -57,8 +57,16 @@ const saveimage = async ()=>{
 saveimage()
     
 }
-ctrl.like = (req,res)=>{
-
+ctrl.like = async (req,res)=>{
+    const imagee = await image.findOne({filename:{$regex: req.params.image_id}})
+    if(imagee){
+        imagee.likes +=1
+        await imagee.save()
+        res.json({likes: imagee.likes})
+    }
+    else{
+        res.status(500).json({error: 'Internal error'})
+    }
 }
 
 ctrl.comment = async (req,res)=>{
