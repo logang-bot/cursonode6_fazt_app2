@@ -1,3 +1,4 @@
 module.exports = {
-    image:require('./image')
+    image:require('./image'),
+    comment:require('./comment')
 }
