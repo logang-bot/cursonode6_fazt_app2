@@ -9,9 +9,20 @@ const { ETXTBSY } = require('constants')
 const ctrl = {}
 
 ctrl.index =async (req,res)=>{
+    const viewModel = {imagee:{},comments:{}}
     const imagee = await image.findOne({filename: {$regex: req.params.image_id}})
-    const comments = await comment.find({image_id:imagee._id})
-    res.render('image', {imagee, comments})
+    if (imagee) {
+        imagee.views += 1
+        viewModel.imagee = imagee
+        await imagee.save()
+        const comments = await comment.find({ image_id: imagee._id })
+        viewModel.comments = comments
+        res.render('image', viewModel)
+    }
+    else{
+        res.redirect('/')
+    }
+    
 }
 ctrl.create =async (req,res)=>{
 
@@ -58,6 +69,9 @@ ctrl.comment = async (req,res)=>{
         newComment.image_id = imagee._id
         await newComment.save()
         res.redirect('/images/'+imagee.uniqueId)
+    }
+    else{
+        res.redirect('/')
     }
 }
 
