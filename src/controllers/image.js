@@ -83,7 +83,13 @@ ctrl.comment = async (req,res)=>{
     }
 }
 
-ctrl.remove = (req,res)=>{
-    
+ctrl.remove = async (req,res)=>{
+    const imagee = await image.findOne({filename:{$regex: req.params.image_id}})
+    if(imagee){
+        await fs.unlink(path.resolve('./src/public/upload/'+ imagee.filename))
+        await comment.deleteOne({image_id: imagee._id})
+        await imagee.remove()
+        res.json(true)
+    }
 }
 module.exports = ctrl
