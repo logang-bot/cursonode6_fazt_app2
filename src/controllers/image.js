@@ -4,12 +4,14 @@ const fs = require('fs-extra')
 const md5 = require('md5')
 
 const {image, comment} = require('../models')
+const sidebar = require('../helpers/sidebar')
+
 const { ETXTBSY } = require('constants')
 
 const ctrl = {}
 
 ctrl.index =async (req,res)=>{
-    const viewModel = {imagee:{},comments:{}}
+    let viewModel = {imagee:{},comments:{}}
     const imagee = await image.findOne({filename: {$regex: req.params.image_id}})
     if (imagee) {
         imagee.views += 1
@@ -17,6 +19,7 @@ ctrl.index =async (req,res)=>{
         await imagee.save()
         const comments = await comment.find({ image_id: imagee._id })
         viewModel.comments = comments
+        viewModel = await sidebar(viewModel)
         res.render('image', viewModel)
     }
     else{

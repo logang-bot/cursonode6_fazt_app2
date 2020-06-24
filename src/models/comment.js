@@ -12,4 +12,13 @@ const commentSchema = new Schema({
     timestamp: {type:Date, default:Date.now}
 })
 
+commentSchema.virtual('image')
+    .set(function(image){
+        this._image = image
+    })
+    .get(function(){
+        return this._image
+    })
+
+
 module.exports=mongoose.model('comment', commentSchema)
